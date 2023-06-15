@@ -8,7 +8,7 @@ import Image from "next/image";
 import { signIn, signOut, useSession, getProviders } from "next-auth/react";
 
 export default function Nav() {
-	const [isUserSignedIn, serIsUserSignedIn] = useState(true);
+	const { data: session } = useSession();
 
 	const [providers, setProviders] = useState(null);
 
@@ -21,9 +21,7 @@ export default function Nav() {
 			setProviders(response);
 		};
 
-		// setProviders()
 		setUpProviders();
-		//uncomment this setproviders function
 	}, []);
 
 	return (
@@ -41,7 +39,7 @@ export default function Nav() {
 
 			{/* desktop navigation  */}
 			<div className="sm:flex hidden">
-				{isUserSignedIn ? (
+				{session?.user ? (
 					<div className="flex gap-3 md:gap-5">
 						<Link href={"/create-prompt"} className="black_btn">
 							Create Post
@@ -53,7 +51,7 @@ export default function Nav() {
 
 						<Link href={"/profile"}>
 							<Image
-								src={"/assets/images/logo.svg"}
+								src={session?.user.image}
 								width={37}
 								height={37}
 								className="rounded-full"
@@ -68,7 +66,9 @@ export default function Nav() {
 									type="button"
 									onClick={() => signIn(provider.id)}
 									className="black_btn"
-									key={provider.name}></button>
+									key={provider.name}>
+									Sign In
+								</button>
 							))}
 					</>
 				)}
@@ -76,10 +76,10 @@ export default function Nav() {
 
 			{/* mobile navigation */}
 			<div className="sm:hidden flex relative">
-				{isUserSignedIn ? (
+				{session?.user ? (
 					<div className="fles">
 						<Image
-							src={"assets/images/logo.svg"}
+							src={session?.user.image}
 							width={37}
 							height={37}
 							className="rounded-full pointer"
