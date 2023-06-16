@@ -36,7 +36,7 @@ export default function Feed() {
 			const response = await fetch("/api/prompt/");
 			const data = await response.json();0 
 
-			if(posts.length<1) setPosts(data)
+			setPosts(data)
 		};
 
 		fetchPosts();
@@ -47,7 +47,7 @@ export default function Feed() {
 			<form className="relative w-full flex-center" onSubmit={handleFormSubmit}>
 				<input
 					type="text"
-					placeholder="search for a tag or a username"
+					placeholder="search for username to see prompts by that user"
 					value={searchText}
 					onChange={handleSearchChange}
 					required
