@@ -20,4 +20,3 @@ export const POST = async (req, res) => {
 		return new Response("failed to save to database", { status: 500 });
 	}
 };
-  

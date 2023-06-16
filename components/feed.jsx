@@ -10,16 +10,33 @@ export default function Feed() {
 	const [posts, setPosts] = useState([]);
 
 	const handleSearchChange = (e) => {
+		e.preventDefault();
 		const value = e.target.value;
 		setSearchText(value);
 	};
 
+	const fetchSearchedPosts = async (searchTerm) => {
+		const response = await fetch(`/api/prompt/search/${searchTerm}`);
+		const data = await response.json();
+
+		setPosts(data);
+
+		setTimeout(() => {
+			setSearchText("");
+		}, 2000);
+	};
+
+	const handleFormSubmit = async (e) => {
+		e.preventDefault();
+		fetchSearchedPosts(searchText);
+	};
+
 	useEffect(() => {
 		const fetchPosts = async () => {
-			const response = await fetch("/api/prompt");
-			const data = await response.json();
+			const response = await fetch("/api/prompt/");
+			const data = await response.json();0 
 
-			setPosts(data);
+			if(posts.length<1) setPosts(data)
 		};
 
 		fetchPosts();
@@ -27,7 +44,7 @@ export default function Feed() {
 
 	return (
 		<section className="feed">
-			<form className="relative w-full flex-center">
+			<form className="relative w-full flex-center" onSubmit={handleFormSubmit}>
 				<input
 					type="text"
 					placeholder="search for a tag or a username"
